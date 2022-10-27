@@ -1,6 +1,6 @@
 
 // extends number ? number : string
-export class Range<T extends string | number>{
+export default class Range<T extends string | number>{
   protected min: T;
   protected max: T;
   protected type: 'string' | 'number';
@@ -68,3 +68,11 @@ export class Range<T extends string | number>{
     }
   }
 }
+
+// const symbolRange = new Range('a', 'f');
+// // ['a', 'b', 'c', 'd', 'e', 'f']
+// console.log(Array.from(symbolRange)); 
+
+// const numberRange = new Range(-5, 1);
+// // [1, 0, -1, -2, -3, -4, -5]
+// console.log(Array.from(numberRange.reverse()));
