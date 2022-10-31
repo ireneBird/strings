@@ -4,7 +4,7 @@ export const regExpStr = /^[\w\p{Number}$_]+$/u;
 
 // Необходимо создать массив на основе строки, где раздилителем будут символы . , ; или пробелы (подряд идущие пробелы считаюся за один)
 
-export const reqExpSplit = /[.,;\s]+/g;
+export const reqExpSplit = /[.,;\s]+/;
 
 // Необходимо написать функцию, которая принимает строковый шаблон и объект параметров, и возвращает результат применения данных к этому шаблону
 interface Params {
@@ -14,7 +14,7 @@ interface Params {
 export function format(str: string, params: Params) {
   const reProp = /\$\{(\w+)\}/g;
 
-  return str.replaceAll(reProp, (...args) => {
+  return str.replace(reProp, (...args) => {
     const subStr = params[args[1]];
     return subStr ? subStr.toString() : '';
   })

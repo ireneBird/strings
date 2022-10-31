@@ -75,29 +75,37 @@ export function enumerate<T>(iterObj: Iterable<T>): IterableIterator<[number, T]
 
 // const randomInt = random(0, 120);
 // console.log([...take(enumerate(randomInt), 3)]);
+type IterableValue<T extends Iterable<any>[]> = T extends Iterable<infer V>[] ? V[] : unknown;
 
-export function seq<T>(...args: any): IterableIterator<T> {
+export function seq<T extends Iterable<any>[]>(
+  ...iterables: T
+): IterableIterator<IterableValue<T>> {
 
-  let index = 0;
-  let innerIndex = 0;
+  const argIter = iterables[Symbol.iterator]();
+  let argCursor = argIter.next();
+  let cursor: { next: () => any; } | undefined;
 
   return {
-    [Symbol.iterator](): IterableIterator<T> {
+    [Symbol.iterator]() {
       return this;
     },
 
-    next(): IteratorResult<T> {
-      if ((index === args.length - 1) && innerIndex === [...args[index]].length) {
-        return { done: true, value: null }
-      }
+    next(): IteratorResult<any> {
+      while (true) {
+        if (argCursor.done) {
+          return { value: undefined, done: true }
+        }
 
-      if (innerIndex >= [...args[index]].length) {
-        index++;
-        innerIndex = 0;
-      }
+        cursor ??= argCursor.value[Symbol.iterator]();
 
-      return {
-        done: false, value: [...args[index]][innerIndex++],
+        const res = cursor.next();
+        if (res.done) {
+          argCursor = argIter.next();
+          cursor = undefined;
+          continue;
+        }
+
+        return res;
       }
     }
   }
@@ -105,8 +113,8 @@ export function seq<T>(...args: any): IterableIterator<T> {
 // 1, 2, 3, 4, 'b', 'l', 'a'
 // console.log(...seq([1, 2], new Set([3, 4]), 'bla'));
 
-export function zip<T>(...args: any): IterableIterator<T[] | null> {
-  let iterators = args.map((arg: IterableIterator<T>) => arg[Symbol.iterator]());
+export function zip<T>(...iterables: any): IterableIterator<T[] | null> {
+  let iterators = iterables.map((arg: IterableIterator<T>) => arg[Symbol.iterator]());
   let state = 0;
 
   return {
@@ -115,30 +123,18 @@ export function zip<T>(...args: any): IterableIterator<T[] | null> {
     },
 
     next(): IteratorResult<T[] | null> {
-      let ansArr: T[] = [];
-      if (state === iterators.length - 1) {
-        return { done: true, value: null }
-      }
+      const tuple = new Array(iterators.length);
 
-      iterators.map((iterator: IterableIterator<T>) => {
-
-        const res = iterator?.next();
+      for (const [i, iterator] of iterators.entries()) {
+        const res = iterator.next();
 
         if (res.done) {
-          return res
+          return { done: true, value: undefined }
         }
-
-        if (res.value !== null) {
-          ansArr.push(res.value)
-        }
-
-      })
-
-      if (ansArr.length === 0) {
-        return { done: true, value: null }
+        tuple[i] = res.value;
       }
 
-      return { done: false, value: ansArr }
+      return { value: tuple, done: false }
     }
   }
 }
@@ -163,7 +159,6 @@ export function mapSeq<T>(data: Iterable<T>, callbacks: Function[]): IterableIte
 
       let ans = res.value
       callbacks.forEach((cb: Function) => ans = cb(ans));
-      console.log(ans)
 
       return { done: false, value: ans }
     }
