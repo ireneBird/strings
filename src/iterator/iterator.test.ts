@@ -12,8 +12,6 @@ describe('Testing iterators', () => {
     const rnd2 = iterRandom.next();
     assert.strictEqual(rnd2.value >= 1 && rnd2.value <= 100, true);
 
-    const rnd6 = iterRandom.next();
-    assert.strictEqual(rnd6.value >= 1 && rnd6.value <= 100, true);
   })
 
   it("Should return an iterator over the given number of its elements ", function () {
@@ -47,12 +45,5 @@ describe('Testing iterators', () => {
     expect([...mapSeq([1, 2, 3], callbacks)]).toStrictEqual([1, 3, 5]);
   });
 
-  // it("Should return ranges from min to max", () => {
-  //   const symbolRange = new Range('a', 'f');
-  //   expect(Array.from(symbolRange)).toStrictEqual(['a', 'b', 'c', 'd', 'e', 'f']);
-
-  //   const numberRange = new Range(-5, 1);
-  //   expect(Array.from(numberRange.reverse())).toStrictEqual([1, 0, -1, -2, -3, -4, -5]);
-  // })
 
 })

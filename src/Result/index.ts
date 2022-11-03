@@ -1,6 +1,7 @@
+
 type Data<T> = T | Result<T>
 
-class Result<T>{
+export default class Result<T>{
   readonly error?: Error;
 
   protected readonly data?: T;
@@ -77,9 +78,3 @@ class Result<T>{
   }
 };
 
-
-
-
-const result = new Result(() => 10);
-console.log(result)
-result.map((el) => el * 2).flatMap((el) => Result.error(el)).catch((err) => console.log(err));
