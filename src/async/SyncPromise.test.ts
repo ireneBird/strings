@@ -1,4 +1,5 @@
-// @ts-nocheck
+
+
 import { SyncPromise } from './SyncPromise';
 
 const DEFAULT_VALUE = "default"

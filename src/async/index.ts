@@ -36,3 +36,37 @@ function promisify(fn: Function): Function {
   };
 };
 
+
+
+type InnerFunc<T> = () => T | Promise<T>;
+function allLimit<T>(iterables: Iterable<InnerFunc<T>>, limit: number): Promise<T[]> {
+  return new Promise((resolve, reject))
+}
+
+
+
+// allLimit([f1, f2, f3, f4], 2).then(console.log)
+
+// function f1() {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => 1, 100)
+//   })
+// }
+
+// function f2() {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => 1, 100)
+//   })
+// }
+
+// function f3() {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => 1, 100)
+//   })
+// }
+
+// function f4() {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => 1, 100)
+//   })
+// }
