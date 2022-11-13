@@ -7,7 +7,7 @@ class UncaughtSyncPromiseError extends Error {
 }
 
 const PENDING = 'pending',
-  FULFILLED = 'fulfilled', // We later abuse these as array indices
+  FULFILLED = 'fulfilled',
   REJECTED = 'rejected';
 
 function isPromise(p: any) {
@@ -16,7 +16,7 @@ function isPromise(p: any) {
 
 // @ts-expect-error
 function addReject(prom: Promise<any>, reject) {
-  prom.then(null, reject) // Use this style for sake of non-Promise thenables (e.g., jQuery Deferred)
+  prom.then(null, reject)
 }
 
 

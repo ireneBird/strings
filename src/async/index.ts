@@ -8,7 +8,6 @@ function timeout(promise: Promise<unknown>, delay: number) {
 // timeout(fetch('//my-data'), 100).then(console.log).catch(console.error);
 
 function setImmediate<T>(cb: Function, _args: []): ReturnType<typeof setTimeout> {
-  console.log(_args)
   return setTimeout(() => { cb(_args) }, 0);
 
 }
